@@ -6,6 +6,7 @@ const host = require("./host");
 const db = require("./db");
 
 require("dotenv").config();
+require("./models/index");
 
 app.use(cors({ origin: [host], }));
 app.use(bodyParser.urlencoded({ extended: true, }));
@@ -25,5 +26,11 @@ const connectToDatabase = async () => {
 };
 
 connectToDatabase();
+
+const authRouter = require("./routers/auth.router");
+const userRouter = require("./routers/user.router");
+
+app.use("/auth", authRouter);
+app.use("/user", userRouter);
 
 module.exports = app;

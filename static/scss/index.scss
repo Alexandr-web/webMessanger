@@ -1,1 +1,86 @@
 @import "./_global";
+
+.auth {
+  min-height: 100vh;
+
+  &__data {
+    min-height: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .form {
+      width: 500px;
+    }
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+
+  &__title {
+    margin-bottom: 15px;
+    @extend %roboto-400;
+    font-size: 24px;
+    text-align: center;
+  }
+
+  &__fields {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__label {
+    position: relative;
+    display: block;
+  }
+
+  &__input {
+    width: 100%;
+    height: $inputHeight;
+    border: none;
+    background: $lightGrey;
+    border-radius: 10px;
+    font-size: 18px;
+    padding: 10px;
+    transition: background .3s;
+
+    &:focus {
+      background: $lightBlue;
+    }
+  }
+
+  &__field {
+    &:not(:last-child) {
+      margin-bottom: 25px;
+    }
+
+    &-title {
+      position: absolute;
+      display: inline-block;
+      z-index: 1;
+      transform: translateY(calc($inputHeight / 4)) translateX(10px);
+      font-size: 18px;
+      color: $grey;
+      transition: transform, font-size, color, .3s;
+
+      &-up {
+        font-size: 14px;
+        transform: translateY(-17px) translateX(0);
+        color: $blue;
+      }
+    }
+  }
+
+  &__submit {
+    display: inline-block;
+    border-radius: 10px;
+    padding: 10px 20px;
+    border: none;
+    background: $blue;
+    color: $white;
+    cursor: pointer;
+    margin: 0 auto;
+  }
+}

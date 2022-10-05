@@ -5,5 +5,8 @@
 </template>
 
 <script>
-export default { name: "IndexPage", };
+  export default {
+    name: "IndexPage",
+    middleware: "checkAuth",
+  };
 </script>
