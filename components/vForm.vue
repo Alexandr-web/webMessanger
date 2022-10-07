@@ -3,7 +3,10 @@
     class="form"
     @submit.prevent="$emit('send')"
   >
-    <h3 class="form__title">
+    <h3
+      v-if="title"
+      class="form__title"
+    >
       {{ title }}
     </h3>
     <div class="form__fields">
@@ -16,14 +19,6 @@
           class="form__label"
           :for="field.id"
         >
-          <span
-            class="form__field-title"
-            :class="{
-              'form__field-title-up': field.titleUp
-            }"
-          >
-            {{ field.input.placeholder }}
-          </span>
           <input
             :id="field.id"
             v-model.trim="field.input.value"
@@ -32,6 +27,14 @@
             @focus="focusInput(field.id)"
             @blur="blurInput(field.id)"
           >
+          <span
+            class="form__field-title"
+            :class="{
+              'form__field-title-up': field.titleUp
+            }"
+          >
+            {{ field.input.placeholder }}
+          </span>
         </label>
       </div>
       <button
@@ -52,10 +55,7 @@
         type: String,
         required: true,
       },
-      title: {
-        type: String,
-        required: true,
-      },
+      title: String,
       fields: {
         type: Array,
         required: true,

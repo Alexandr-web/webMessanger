@@ -1,18 +1,18 @@
 <template>
   <div class="messenger">
-    <vSidebarRooms />
+    <vSidebarLeft />
     <vMessenger />
   </div>
 </template>
 
 <script>
-  import vSidebarRooms from "@/components/vSidebarRooms";
+  import vSidebarLeft from "@/components/vSidebarLeft";
   import vMessenger from "@/components/vMessenger";
 
   export default {
     name: "IndexPage",
     components: {
-      vSidebarRooms,
+      vSidebarLeft,
       vMessenger,
     },
     middleware: "checkAuth",

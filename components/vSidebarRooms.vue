@@ -1,32 +1,32 @@
 <template>
-  <aside class="sidebar-rooms">
-    <header class="sidebar-rooms__header">
-      <div class="sidebar-rooms__search">
+  <div class="sidebar-left__part sidebar-left__rooms">
+    <header class="sidebar-left__rooms-header">
+      <div class="sidebar-left__rooms-search">
         <input
           v-model.trim="search"
-          class="sidebar-rooms__search-input"
+          class="sidebar-left__rooms-search-input"
           type="text"
           placeholder="Поиск..."
         />
       </div>
     </header>
-    <main class="sidebar-rooms__main">
-      <ul class="sidebar-rooms__list">
+    <main class="sidebar-left__rooms-main">
+      <ul class="sidebar-left__rooms-list">
         <li
           v-for="n in 2"
           :key="n"
-          class="sidebar-rooms__room"
+          class="sidebar-left__rooms-room"
         >
-          <div class="sidebar-rooms__room-inner">
-            <div class="sidebar-rooms__room-block">
-              <div class="sidebar-rooms__room-picture"></div>
+          <div class="sidebar-left__rooms-room-inner">
+            <div class="sidebar-left__rooms-room-block">
+              <div class="sidebar-left__rooms-room-picture"></div>
             </div>
-            <div class="sidebar-rooms__room-block sidebar-rooms__room-info">
-              <h4 class="sidebar-rooms__room-title">
+            <div class="sidebar-left__rooms-room-block sidebar-left__rooms-room-info">
+              <h4 class="sidebar-left__rooms-room-title">
                 Title room {{ n }}
               </h4>
-              <div class="sidebar-rooms__room-messages">
-                <div class="sidebar-rooms__room-messages-count">
+              <div class="sidebar-left__rooms-room-messages">
+                <div class="sidebar-left__rooms-room-messages-count">
                   {{ n + 1 }}
                 </div>
               </div>
@@ -35,13 +35,12 @@
         </li>
       </ul>
     </main>
-  </aside>
+  </div>
 </template>
 
 <script>
   export default {
     name: "SidebarRoomsComponent",
-    props: {},
     data: () => ({ search: "", }),
   };
 </script>
