@@ -1,6 +1,13 @@
 const host = require("../server/host");
 
 export default {
+  state: () => ({ activeRoom: null, }),
+  getters: { getActiveRoom: (state) => state.activeRoom, },
+  mutations: {
+    setActiveRoom(state, val) {
+      state.activeRoom = val;
+    },
+  },
   actions: {
     async create({}, { fd, token, }) {
       try {
@@ -12,6 +19,19 @@ export default {
             Authorization: `Bearer ${token || ""}`,
           },
           body: JSON.stringify(fd),
+        });
+
+        return res.json();
+      } catch (err) {
+        throw err;
+      }
+    },
+
+    async getMessages({}, id) {
+      try {
+        const res = await fetch(`${host}/room/api/${id}/messages`, {
+          method: "GET",
+          headers: { "Accept-Type": "application/json", },
         });
 
         return res.json();

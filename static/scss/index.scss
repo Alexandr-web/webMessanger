@@ -120,9 +120,11 @@
 
   &-main {
     display: grid;
+    grid-template-rows: .1fr 1fr .2fr;
     grid-auto-columns: 1fr;
     grid-auto-flow: row;
     max-height: inherit;
+    background: $lightBlue;
 
     &__header {
       padding: 10px;
@@ -147,7 +149,6 @@
       padding: 10px;
       overflow-x: hidden;
       overflow-y: auto;
-      background: $lightBlue;
 
       &-messages {
         display: flex;
@@ -192,7 +193,7 @@
 
     &__area-write {
       display: flex;
-      padding: 10px;
+      padding: 10px 0;
       height: 120px;
       margin-top: auto;
     }
@@ -313,6 +314,7 @@
         width: 25px;
         height: 25px;
         border-radius: 50%;
+        background: $lightBlue;
       }
   
       &-inner {
@@ -357,6 +359,17 @@
         background-color: $blue;
       }
     }
+  }
+}
+
+.nothing {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+
+  &__desc {
+    font-size: 15px;
+    color: $grey;
   }
 }
 

@@ -1,6 +1,9 @@
 <template>
   <div class="messenger-main">
-    <header class="messenger-main__header">
+    <header
+      v-if="getActiveRoom"
+      class="messenger-main__header"
+    >
       <h3 class="messenger-main__header-title">
         Название комнаты 212131
       </h3>
@@ -8,8 +11,13 @@
         4 участника
       </h4>
     </header>
-    <main class="messenger-main__chat">
-      <div class="messenger-main__chat-messages">
+    <main
+      v-if="getActiveRoom"
+      class="messenger-main__chat"
+    >
+      <div
+        class="messenger-main__chat-messages"
+      >
         <div class="messenger-main__chat-message">
           <header class="messenger-main__chat-message-header">
             <h4 class="messenger-main__chat-message-author-name">
@@ -52,19 +60,34 @@
         </div>
       </div>
     </main>
-    <footer class="messenger-main__area-write">
+    <footer
+      v-if="getActiveRoom"
+      class="messenger-main__area-write"
+    >
       <textarea
         v-model.trim="message"
         class="messenger-main__input-message"
         placeholder="Написать сообщение..."
       ></textarea>
     </footer>
+    <vNothing
+      v-else
+      text="Выберите комнату"
+    />
   </div>
 </template>
 
 <script>
+  import vNothing from "@/components/vNothing";
+
   export default {
     name: "MessengerComponent", 
+    components: { vNothing, },
     data: () => ({ message: "", }),
+    computed: {
+      getActiveRoom() {
+        return this.$store.getters["room/getActiveRoom"];
+      },
+    },
   };
 </script>

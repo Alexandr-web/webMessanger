@@ -21,16 +21,24 @@
           :room="room"
         />
       </ul>
+      <vNothing
+        v-else
+        text="Комнат нет"
+      />
     </main>
   </div>
 </template>
 
 <script>
   import vRoom from "@/components/vRoom";
+  import vNothing from "@/components/vNothing";
 
   export default {
     name: "SidebarRoomsComponent",
-    components: { vRoom, },
+    components: {
+      vRoom,
+      vNothing,
+    },
     data: () => ({
       search: "",
       rooms: [],
