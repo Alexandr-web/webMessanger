@@ -39,9 +39,17 @@
       </div>
       <button
         class="form__submit"
+        :class="{
+          'form__submit-pending': pending,
+        }"
         type="submit"
+        :disabled="pending"
       >
         {{ textButton }}
+        <div
+          v-if="pending"
+          class="form__submit-loader"
+        ></div>
       </button>
     </div>
   </form>
@@ -55,6 +63,7 @@
         type: String,
         required: true,
       },
+      pending: Boolean,
       title: String,
       fields: {
         type: Array,

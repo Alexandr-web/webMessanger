@@ -29,8 +29,10 @@ connectToDatabase();
 
 const authRouter = require("./routers/auth.router");
 const userRouter = require("./routers/user.router");
+const roomRouter = require("./routers/room.router");
 
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
+app.use("/room", roomRouter);
 
 module.exports = app;

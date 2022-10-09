@@ -11,4 +11,12 @@ module.exports = sequelize.define("room", {
     primaryKey: true,
     autoIncrement: true,
   },
+  title: {
+    type: DataTypes.TEXT,
+    required: true,
+  },
+  desc: {
+    type: DataTypes.TEXT,
+    defaultValue: "",
+  },
 }, { tableName: "room", });

@@ -6,6 +6,7 @@
           :fields="fields"
           :title="title"
           :text-button="textButton"
+          :pending="pending"
           @changeTitleState="changeTitleState"
           @send="login"
         />
@@ -26,6 +27,7 @@
     data: () => ({
       title: "Вход",
       textButton: "Войти",
+      pending: false,
       fields: [
         {
           id: "email",
@@ -58,7 +60,11 @@
 
         const res = this.$store.dispatch("auth/login", data);
 
+        this.pending = true;
+
         res.then(({ ok, }) => {
+          this.pending = false;
+          
           if (ok) {
             this.$router.push("/");
           }

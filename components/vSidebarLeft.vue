@@ -10,11 +10,14 @@
       }"
     >
       <vSidebarRooms :style="{ 'width': `${leftSidebarWidth}px` }" />
-      <vSidebarCreateRoom :style="{ 'width': `${leftSidebarWidth}px` }" />
+      <vSidebarCreateRoom
+        :style="{ 'width': `${leftSidebarWidth}px` }"
+        @scrollTo="setActivePart"
+      />
     </div>
     <button
       class="sidebar-left__nav-btn"
-      @click="setTransition"
+      @click="activePart += 1"
     >
       <vArrowRightIcon
         :classes="[
@@ -44,6 +47,15 @@
       transitionWay: 0,
       limitWay: 1,
     }),
+    watch: {
+      activePart(val) {
+        if (val > this.limitWay) {
+          this.activePart = 0;
+        }
+
+        this.transitionWay = val * this.leftSidebarWidth;
+      },
+    },
     mounted() {
       this.setSidebarWidth();
 
@@ -55,17 +67,8 @@
 
         this.leftSidebarWidth = sidebar.offsetWidth;
       },
-      setTransition() {
-        this.activePart += 1;
-
-        this.checkWay();
-
-        this.transitionWay = this.activePart * this.leftSidebarWidth;
-      },
-      checkWay() {
-        if (this.activePart > this.limitWay) {
-          this.activePart = 0;
-        }
+      setActivePart(val) {
+        this.activePart = val;
       },
     },
   };

@@ -39,6 +39,13 @@ form {
   width: 100%;
 }
 
+button:disabled,
+input[type=button]:disabled,
+input[type=submit]:disabled {
+  cursor: default;
+  opacity: .8;
+}
+
 .container {
   max-width: 1440px;
   height: 100%;

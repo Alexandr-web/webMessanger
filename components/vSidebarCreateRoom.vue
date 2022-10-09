@@ -3,6 +3,7 @@
     <vForm
       :fields="fields"
       :text-button="textButton"
+      :pending="pending"
       @changeTitleState="changeTitleState"
       @send="createRoom"
     />
@@ -18,9 +19,10 @@
     components: { vForm, },
     mixins: [changeFieldsData],
     data: () => ({
+      pending: false,
       fields: [
         {
-          id: "roomName",
+          id: "roomTitle",
           input: {
             placeholder: "Название комнаты",
             value: "",
@@ -38,13 +40,30 @@
     }),
     methods: {
       createRoom() {
-        const fd = this.fields.reduce((acc, { id, input: { value, }, }) => {
-          acc[id] = value;
+        const title = this.fields.find(({ id, }) => id === "roomTitle").input.value;
+        const desc = this.fields.find(({ id, }) => id === "roomDesc").input.value;
+        const fd = {
+          title,
+          desc,
+        };
+        const token = this.$store.getters["auth/getToken"];
+        const res = this.$store.dispatch("room/create", {
+          fd,
+          token,
+        });
 
-          return acc;
-        }, {});
+        this.pending = true;
 
-        console.log(fd);
+        res.then(({ ok, }) => {
+          this.pending = false;
+
+          if (ok) {
+            this.$emit("scrollTo", 0);
+            this.$router.go(0);
+          }
+        }).catch((err) => {
+          throw err;
+        });
       },
     },
   };

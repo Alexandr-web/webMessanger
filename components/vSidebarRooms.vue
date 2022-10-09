@@ -11,36 +11,42 @@
       </div>
     </header>
     <main class="sidebar-left__rooms-main">
-      <ul class="sidebar-left__rooms-list">
-        <li
-          v-for="n in 2"
-          :key="n"
-          class="sidebar-left__rooms-room"
-        >
-          <div class="sidebar-left__rooms-room-inner">
-            <div class="sidebar-left__rooms-room-block">
-              <div class="sidebar-left__rooms-room-picture"></div>
-            </div>
-            <div class="sidebar-left__rooms-room-block sidebar-left__rooms-room-info">
-              <h4 class="sidebar-left__rooms-room-title">
-                Title room {{ n }}
-              </h4>
-              <div class="sidebar-left__rooms-room-messages">
-                <div class="sidebar-left__rooms-room-messages-count">
-                  {{ n + 1 }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </li>
+      <ul
+        v-if="rooms.length"
+        class="sidebar-left__rooms-list"
+      >
+        <vRoom
+          v-for="(room, index) in rooms"
+          :key="index"
+          :room="room"
+        />
       </ul>
     </main>
   </div>
 </template>
 
 <script>
+  import vRoom from "@/components/vRoom";
+
   export default {
     name: "SidebarRoomsComponent",
-    data: () => ({ search: "", }),
+    components: { vRoom, },
+    data: () => ({
+      search: "",
+      rooms: [],
+    }),
+    async fetch() {
+      try {
+        const token = this.$store.getters["auth/getToken"];
+        const id = await this.$store.dispatch("user/getIdByToken", token);
+        const { ok, rooms, } = await this.$store.dispatch("user/getRooms", id);
+
+        if (ok) {
+          this.rooms = rooms;
+        }
+      } catch (err) {
+        throw err;
+      }
+    },
   };
 </script>

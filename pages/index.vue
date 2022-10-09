@@ -16,5 +16,6 @@
       vMessenger,
     },
     middleware: "checkAuth",
+    head: { title: "Мессенджер", },
   };
 </script>
