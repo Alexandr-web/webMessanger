@@ -1,5 +1,8 @@
 <template>
-  <li class="sidebar-left__rooms-room">
+  <li
+    class="sidebar-left__rooms-room"
+    @click="$emit('setRoom', room)"
+  >
     <div class="sidebar-left__rooms-room-inner">
       <div class="sidebar-left__rooms-room-block">
         <div class="sidebar-left__rooms-room-picture"></div>

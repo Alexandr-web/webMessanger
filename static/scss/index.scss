@@ -95,21 +95,36 @@
     cursor: pointer;
     margin: 0 auto;
 
+    .loader {
+      margin-left: 10px;
+    }
+
     &-pending {
       display: flex;
       align-items: center;
       justify-content: center;
     }
+  }
+}
 
-    &-loader {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      margin-left: 10px;
-      border-top: 2px solid $white;
-      border-right: 2px solid $white;
-      animation: spin 1s linear infinite;
-    }
+.loader {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+
+  &--white {
+    border-top: 2px solid $white;
+    border-right: 2px solid $white;
+  }
+
+  &--blue {
+    border-top: 2px solid $blue;
+    border-right: 2px solid $blue;
+  }
+
+  &--center {
+    margin: 0 auto;
   }
 }
 
@@ -193,7 +208,7 @@
 
     &__area-write {
       display: flex;
-      padding: 10px 0;
+      padding: 10px;
       height: 120px;
       margin-top: auto;
     }
@@ -203,13 +218,8 @@
       height: 100%;
       border: none;
       background: $lightGrey;
-      transition: background .3s;
       padding: 10px;
       border-radius: 10px;
-
-      &:focus {
-        background: $lightBlue;
-      }
     }
   }
 }

@@ -7,41 +7,52 @@
           class="sidebar-left__rooms-search-input"
           type="text"
           placeholder="Поиск..."
+          @keydown.enter="searchRoom"
         />
       </div>
     </header>
     <main class="sidebar-left__rooms-main">
       <ul
-        v-if="rooms.length"
+        v-if="!search && myRooms.length"
         class="sidebar-left__rooms-list"
       >
         <vRoom
-          v-for="(room, index) in rooms"
+          v-for="(room, index) in myRooms"
           :key="index"
           :room="room"
+          @setRoom="setRoom"
         />
       </ul>
-      <vNothing
-        v-else
-        text="Комнат нет"
-      />
+      <ul
+        v-else-if="searchRooms.length"
+        class="sidebar-left__rooms-list"
+      >
+        <vRoom
+          v-for="(room, index) in searchRooms"
+          :key="index"
+          :room="room"
+          @setRoom="setRoom"
+        />
+      </ul>
+      <div
+        v-if="pending"
+        class="loader loader--blue loader--center"
+      ></div>
     </main>
   </div>
 </template>
 
 <script>
   import vRoom from "@/components/vRoom";
-  import vNothing from "@/components/vNothing";
 
   export default {
     name: "SidebarRoomsComponent",
-    components: {
-      vRoom,
-      vNothing,
-    },
+    components: { vRoom, },
     data: () => ({
       search: "",
-      rooms: [],
+      pending: false,
+      myRooms: [],
+      searchRooms: [],
     }),
     async fetch() {
       try {
@@ -50,11 +61,46 @@
         const { ok, rooms, } = await this.$store.dispatch("user/getRooms", id);
 
         if (ok) {
-          this.rooms = rooms;
+          this.myRooms = rooms;
         }
       } catch (err) {
         throw err;
       }
+    },
+    methods: {
+      async setRoom(room) {
+        try {
+          const { ok, messages, } = await this.$store.dispatch("room/getMessages", room.id);
+          console.log(messages);
+          if (ok) {
+            this.$store.commit("room/setActiveRoom", {
+              messages,
+              ...room,
+            });
+          }
+        } catch (err) {
+          throw err;
+        }
+      },
+      searchRoom() {
+        if (this.search.length > 3) {
+          const token = this.$store.getters["auth/getToken"];
+          const res = this.$store.dispatch("room/getByTitle", { token, title: this.search, });
+
+          this.searchRooms = [];
+          this.pending = true;
+
+          res.then(({ ok, rooms, }) => {
+            this.pending = false;
+
+            if (ok) {
+              this.searchRooms = rooms;
+            }
+          }).catch((err) => {
+            throw err;
+          });
+        }
+      },
     },
   };
 </script>

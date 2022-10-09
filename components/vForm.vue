@@ -48,7 +48,7 @@
         {{ textButton }}
         <div
           v-if="pending"
-          class="form__submit-loader"
+          class="loader loader--white"
         ></div>
       </button>
     </div>

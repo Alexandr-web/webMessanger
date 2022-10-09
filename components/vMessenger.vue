@@ -5,10 +5,10 @@
       class="messenger-main__header"
     >
       <h3 class="messenger-main__header-title">
-        Название комнаты 212131
+        {{ getActiveRoom.title }}
       </h3>
       <h4 class="messenger-main__header-members">
-        4 участника
+        Всего {{ getActiveRoom.members.length }} участников
       </h4>
     </header>
     <main
@@ -16,49 +16,19 @@
       class="messenger-main__chat"
     >
       <div
+        v-if="getActiveRoom.messages.length"
         class="messenger-main__chat-messages"
       >
-        <div class="messenger-main__chat-message">
-          <header class="messenger-main__chat-message-header">
-            <h4 class="messenger-main__chat-message-author-name">
-              Александр Яковлев
-            </h4>
-          </header>
-          <main class="messenger-main__chat-message-main">
-            <p class="messenger-main__chat-message-text">
-              Далеко-далеко за словесными горами в стране гласных и согласных живут, рыбные тексты. Скатился послушавшись за путь. От всех ему деревни родного лучше речью заманивший инициал назад гор, путь там домах вскоре ее даль?
-            </p>
-          </main>
-        </div>
-        <div class="messenger-main__chat-message messenger-main__chat-message-my">
-          <main class="messenger-main__chat-message-main">
-            <p class="messenger-main__chat-message-text">
-              Далеко-далеко за словесными горами в стране гласных и согласных живут, рыбные тексты. Скатился послушавшись за путь. От всех ему деревни родного лучше речью заманивший инициал назад гор, путь там домах вскоре ее даль?
-            </p>
-          </main>
-        </div>
-        <div class="messenger-main__chat-message messenger-main__chat-message-my">
-          <main class="messenger-main__chat-message-main">
-            <p class="messenger-main__chat-message-text">
-              Далеко-далеко за словесными горами в стране гласных и согласных живут, рыбные тексты. Скатился послушавшись за путь. От всех ему деревни родного лучше речью заманивший инициал назад гор, путь там домах вскоре ее даль?
-            </p>
-          </main>
-        </div>
-        <div class="messenger-main__chat-message messenger-main__chat-message-my">
-          <main class="messenger-main__chat-message-main">
-            <p class="messenger-main__chat-message-text">
-              Далеко-далеко за словесными горами в стране гласных и согласных живут, рыбные тексты. Скатился послушавшись за путь. От всех ему деревни родного лучше речью заманивший инициал назад гор, путь там домах вскоре ее даль?
-            </p>
-          </main>
-        </div>
-        <div class="messenger-main__chat-message messenger-main__chat-message-my">
-          <main class="messenger-main__chat-message-main">
-            <p class="messenger-main__chat-message-text">
-              Далеко-далеко за словесными горами в стране гласных и согласных живут, рыбные тексты. Скатился послушавшись за путь. От всех ему деревни родного лучше речью заманивший инициал назад гор, путь там домах вскоре ее даль?
-            </p>
-          </main>
-        </div>
+        <vMessage
+          v-for="(message, index) in getActiveRoom.messages"
+          :key="index"
+          :message="message"
+        />
       </div>
+      <vNothing
+        v-else
+        text="Сообщений нет"
+      />
     </main>
     <footer
       v-if="getActiveRoom"
@@ -79,10 +49,14 @@
 
 <script>
   import vNothing from "@/components/vNothing";
+  import vMessage from "@/components/vMessage";
 
   export default {
     name: "MessengerComponent", 
-    components: { vNothing, },
+    components: {
+      vNothing,
+      vMessage,
+    },
     data: () => ({ message: "", }),
     computed: {
       getActiveRoom() {

@@ -7,6 +7,7 @@ module.exports = sequelize.define("message", {
     primaryKey: true,
     autoIncrement: true,
   },
+  isMy: { type: DataTypes.BOOLEAN, },
   authorName: { type: DataTypes.TEXT, },
   desc: {
     type: DataTypes.TEXT,

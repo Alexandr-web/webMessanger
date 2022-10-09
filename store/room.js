@@ -39,5 +39,21 @@ export default {
         throw err;
       }
     },
+
+    async getByTitle({}, { token, title, }) {
+      try {
+        const res = await fetch(`${host}/room/api/search/?title=${title}`, {
+          method: "GET",
+          headers: {
+            "Accept-Type": "application/json",
+            Authorization: `Bearer ${token || ""}`,
+          },
+        });
+
+        return res.json();
+      } catch (err) {
+        throw err;
+      }
+    },
   },
 };

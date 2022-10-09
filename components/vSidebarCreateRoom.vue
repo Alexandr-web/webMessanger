@@ -24,7 +24,7 @@
         {
           id: "roomTitle",
           input: {
-            placeholder: "Название комнаты",
+            placeholder: "Название",
             value: "",
           },
         },
@@ -36,7 +36,7 @@
           },
         }
       ],
-      textButton: "Создать",
+      textButton: "Создать комнату",
     }),
     methods: {
       createRoom() {
