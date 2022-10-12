@@ -11,11 +11,6 @@
         <h4 class="sidebar-left__rooms-room-title">
           {{ room.title }}
         </h4>
-        <div class="sidebar-left__rooms-room-messages">
-          <div class="sidebar-left__rooms-room-messages-count">
-            0
-          </div>
-        </div>
       </div>
     </div>
   </li>

@@ -44,6 +44,9 @@
 
 <script>
   import vRoom from "@/components/vRoom";
+  import { io, } from "socket.io-client";
+
+  const socketHost = require("@/server/webSockets/host");
 
   export default {
     name: "SidebarRoomsComponent",
@@ -59,7 +62,7 @@
         const token = this.$store.getters["auth/getToken"];
         const id = await this.$store.dispatch("user/getIdByToken", token);
         const { ok, rooms, } = await this.$store.dispatch("user/getRooms", id);
-
+        
         if (ok) {
           this.myRooms = rooms;
         }
@@ -67,17 +70,24 @@
         throw err;
       }
     },
+    mounted() {
+      const socket = io(socketHost);
+
+      socket.on("doneCreatingRoom", (data) => {
+        this.$store.commit("room/setActiveRoom", data);
+      });
+    },
     methods: {
       async setRoom(room) {
         try {
-          const { ok, messages, } = await this.$store.dispatch("room/getMessages", room.id);
-          console.log(messages);
-          if (ok) {
-            this.$store.commit("room/setActiveRoom", {
-              messages,
-              ...room,
-            });
-          }
+          const socket = io(socketHost);
+          const token = this.$store.getters["auth/getToken"];
+          const id = await this.$store.dispatch("user/getIdByToken", token);
+          
+          socket.emit("setRoom", {
+            userId: id,
+            roomTitle: room.title,
+          });
         } catch (err) {
           throw err;
         }

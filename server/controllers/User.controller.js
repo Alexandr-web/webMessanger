@@ -7,7 +7,7 @@ class User {
       const { id, } = req.params;
 
       if (!id || isNaN(parseInt(id))) {
-        return res.status(400).json({ ok: false, message: "Неккоректные данные", status: 400, });
+        return res.status(400).json({ ok: false, message: "Некорректные данные", status: 400, });
       }
 
       const user = await UserModel.findOne({ where: { id, }, });
@@ -25,7 +25,7 @@ class User {
       const { id, } = req.params;
 
       if (!id || isNaN(parseInt(id))) {
-        return res.status(400).json({ ok: false, message: "Неккоректные данные", status: 400, });
+        return res.status(400).json({ ok: false, message: "Некорректные данные", status: 400, });
       }
 
       const user = await UserModel.findOne({ where: { id, }, });
@@ -34,9 +34,10 @@ class User {
         return res.status(404).json({ ok: false, message: "Такого пользователя не существует", status: 404, });
       }
 
-      const rooms = await Room.findAll({ where: { userId: id, }, });
+      const rooms = await Room.findAll();
+      const roomsWhereUserIsMember = rooms.filter(({ members, }) => members.includes(parseInt(id)));
 
-      return res.status(200).json({ ok: true, rooms, status: 200, });
+      return res.status(200).json({ ok: true, rooms: roomsWhereUserIsMember, status: 200, });
     } catch (err) {
       console.log(err);
 

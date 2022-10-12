@@ -7,6 +7,11 @@ export default {
     setActiveRoom(state, val) {
       state.activeRoom = val;
     },
+    setKeyAtActiveRoom(state, data) {
+      data.map(({ key, val, }) => {
+        state[key] = val;
+      });
+    },
   },
   actions: {
     async create({}, { fd, token, }) {

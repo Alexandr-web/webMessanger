@@ -34,11 +34,28 @@
       v-if="getActiveRoom"
       class="messenger-main__area-write"
     >
-      <textarea
+      <input
+        v-if="getActiveRoom.user.isMember"
         v-model.trim="message"
         class="messenger-main__input-message"
         placeholder="Написать сообщение..."
-      ></textarea>
+        @keydown.enter="sendMessage"
+      />
+      <button
+        v-else
+        class="messenger-main__join-btn"
+        :disabled="pendingJoining"
+        :class="{
+          'messenger-main__join-btn-pending': pendingJoining,
+        }"
+        @click="joinToRoom"
+      >
+        Присоединиться к комнате
+        <div
+          v-if="pendingJoining"
+          class="loader loader--white"
+        ></div>
+      </button>
     </footer>
     <vNothing
       v-else
@@ -50,17 +67,61 @@
 <script>
   import vNothing from "@/components/vNothing";
   import vMessage from "@/components/vMessage";
+  import { io, } from "socket.io-client";
+
+  const socketHost = require("@/server/webSockets/host");
 
   export default {
-    name: "MessengerComponent", 
+    name: "MessengerComponent",
     components: {
       vNothing,
       vMessage,
     },
-    data: () => ({ message: "", }),
+    data: () => ({
+      message: "",
+      pendingJoining: false,
+    }),
     computed: {
       getActiveRoom() {
         return this.$store.getters["room/getActiveRoom"];
+      },
+    },
+    mounted() {
+      const socket = io(socketHost);
+
+      socket.on("doneJoiningToRoom", (data) => {
+        const resData = Object.keys(data).reduce((acc, key) => {
+          acc.push({ [key]: data[key], });
+
+          return acc;
+        }, []);
+
+        this.$store.commit("room/setKeyAtActiveRoom", resData);
+      });
+    },
+    methods: {
+      async joinToRoom() {
+        try {
+          const socket = io(socketHost);
+          const token = this.$store.getters["auth/getToken"];
+          const userId = await this.$store.dispatch("user/getIdByToken", token);
+          const { title: titleRoom, } = this.getActiveRoom;
+          const reqData = {
+            userId,
+            titleRoom,
+          };
+
+          this.pendingJoining = true;
+
+          socket.emit("joinToRoom", reqData);
+        } catch (err) {
+          throw err;
+        }
+      },
+      sendMessage() {
+        const { id, } = this.getActiveRoom;
+
+        console.log(this.message);
       },
     },
   };

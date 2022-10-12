@@ -7,11 +7,14 @@ const db = require("./db");
 
 require("dotenv").config();
 require("./models/index");
+require("./webSockets/index");
 
+// Server settings
 app.use(cors({ origin: [host], }));
 app.use(bodyParser.urlencoded({ extended: true, }));
 app.use(bodyParser.json());
 
+// Database
 const connectToDatabase = async () => {
   try {
     await db.authenticate();
@@ -27,6 +30,7 @@ const connectToDatabase = async () => {
 
 connectToDatabase();
 
+// Routers
 const authRouter = require("./routers/auth.router");
 const userRouter = require("./routers/user.router");
 const roomRouter = require("./routers/room.router");

@@ -8,7 +8,7 @@ class Auth {
       const { name, email, password, } = req.body;
 
       if (![name, email, password].every(Boolean)) {
-        return res.status(400).json({ ok: false, message: "Неккоректные данные", status: 400, });
+        return res.status(400).json({ ok: false, message: "Некорректные данные", status: 400, });
       }
 
       const user = await User.findOne({ where: { email, }, });
@@ -38,7 +38,7 @@ class Auth {
       const { email, password, } = req.body;
 
       if (![email, password].every(Boolean)) {
-        return res.status(400).json({ ok: false, message: "Неккоректные данные", status: 400, });
+        return res.status(400).json({ ok: false, message: "Некорректные данные", status: 400, });
       }
 
       const user = await User.findOne({ where: { email, }, });

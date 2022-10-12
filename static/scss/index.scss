@@ -208,18 +208,36 @@
 
     &__area-write {
       display: flex;
-      padding: 10px;
-      height: 120px;
       margin-top: auto;
+      padding: 10px;
     }
 
     &__input-message {
       width: 100%;
-      height: 100%;
+      height: 50px;
       border: none;
       background: $lightGrey;
       padding: 10px;
       border-radius: 10px;
+    }
+
+    &__join-btn {
+      cursor: pointer;
+      border: none;
+      padding: 10px;
+      border-radius: 10px;
+      margin: 0 auto;
+      color: $white;
+      background: $blue;
+
+      &-pending {
+        display: flex;
+        align-items: center;
+      }
+
+      .loader {
+        margin-left: 10px;
+      }
     }
   }
 }
@@ -341,7 +359,6 @@
       &-title {
         font-size: 14px;
         @extend %manrope-400;
-        margin-right: 5px;
         white-space: nowrap;
         max-width: 100%;
         overflow: hidden;
@@ -352,21 +369,6 @@
       &-info {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-      }
-  
-      &-messages-count {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: $white;
-        padding: 3px;
-        border-radius: 50%;
-        font-size: 10px;
-        @extend %roboto-400;
-        width: 22px;
-        height: 22px;
-        background-color: $blue;
       }
     }
   }

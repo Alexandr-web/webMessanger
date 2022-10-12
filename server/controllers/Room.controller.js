@@ -9,11 +9,17 @@ class Room {
       }
 
       if (!Object.keys(req.body).includes("title")) {
-        return res.status(400).json({ ok: false, message: "Неккоректные данные", status: 400, });
+        return res.status(400).json({ ok: false, message: "Некорректные данные", status: 400, });
+      }
+
+      const findRoomByTitle = await RoomModel.findOne({ where: { title: req.body.title, }, });
+
+      if (findRoomByTitle) {
+        return res.status(400).json({ ok: false, message: "Такая комната уже существует", status: 400, });
       }
 
       const roomData = { ...req.body, userId: req.userId, members: [req.userId], };
-
+      
       await RoomModel.create(roomData);
 
       return res.status(200).json({ ok: true, message: "Комната создана", status: 200, });
@@ -29,7 +35,7 @@ class Room {
       const { id, } = req.params;
 
       if (!id || isNaN(parseInt(id))) {
-        return res.status(400).json({ ok: false, message: "Неккоректные данные", status: 400, });
+        return res.status(400).json({ ok: false, message: "Некорректные данные", status: 400, });
       }
 
       const messages = await Message.findAll({ where: { roomId: id, }, });
@@ -51,7 +57,7 @@ class Room {
       const { title, } = req.query;
 
       if (!title) {
-        return res.status(400).json({ ok: false, message: "Неккоректные данные", status: 400, });
+        return res.status(400).json({ ok: false, message: "Некорректные данные", status: 400, });
       }
 
       const rooms = await RoomModel.findAll();

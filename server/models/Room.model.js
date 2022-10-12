@@ -14,6 +14,7 @@ module.exports = sequelize.define("room", {
   title: {
     type: DataTypes.TEXT,
     required: true,
+    unique: true,
   },
   desc: {
     type: DataTypes.TEXT,
