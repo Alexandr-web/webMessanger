@@ -6,12 +6,13 @@ const Message = require("../models/Message.model");
 io.on("connection", (socket) => {
   socket.on("setRoom", async (data) => {
     try {
-      if (!Object.keys(data).every((key) => ["userId", "roomTitle"].includes(key))) {
+      if (!Object.keys(data).every((key) => ["userId", "titleRoom"].includes(key))) {
         throw new Error("Некорректные данные");
       }
 
-      const user = await User.findOne({ where: { id: data.userId, }, });
-      const room = await Room.findOne({ where: { title: data.roomTitle, }, });
+      const { userId, titleRoom, } = data;
+      const user = await User.findOne({ where: { id: userId, }, });
+      const room = await Room.findOne({ where: { title: titleRoom, }, });
 
       if (!user) {
         throw new Error("Такого пользователя не существует");
@@ -24,14 +25,18 @@ io.on("connection", (socket) => {
       const messages = await Message.findAll({ where: { roomId: room.id, }, });
       const roomData = {
         user: {
-          isAuthor: room.userId === data.userId,
-          isMember: room.members.includes(data.userId),
+          isAuthor: room.userId === userId,
+          isMember: room.members.includes(userId),
         },
         title: room.title,
         desc: room.desc,
         members: room.members,
         messages,
       };
+
+      if (room.userId === userId) {
+        socket.join(titleRoom);
+      }
 
       io.emit("doneCreatingRoom", roomData);
     } catch (err) {
@@ -63,16 +68,46 @@ io.on("connection", (socket) => {
         throw new Error("Такой пользователь уже является участником данной комнаты");
       }
 
-      const updateRoom = await room.update({ members: room.members.concat(userId), });
+      const newMembers = room.members.concat(userId);
       const roomData = {
         user: {
-          isAuthor: updateRoom.userId === data.userId,
-          isMember: updateRoom.members.includes(data.userId),
+          isAuthor: room.userId === data.userId,
+          isMember: newMembers.includes(data.userId),
         },
-        members: updateRoom.members,
+        members: newMembers,
       };
 
+      await room.update({ members: newMembers, });
+
+      socket.join(titleRoom);
+
       io.emit("doneJoiningToRoom", roomData);
+    } catch (err) {
+      console.log(err);
+
+      throw err;
+    }
+  });
+
+  socket.on("sendMessage", async (data) => {
+    try {
+      if (!Object.keys(data).every((key) => ["userId", "titleRoom", "message"].includes(key))) {
+        throw new Error("Некорректные данные");
+      }
+
+      const { userId, titleRoom, message, } = data;
+      const user = await User.findOne({ where: { id: userId, }, });
+      const room = await Room.findOne({ where: { title: titleRoom, }, });
+
+      if (!user) {
+        throw new Error("Такого пользователя не существует");
+      }
+
+      if (!room) {
+        throw new Error("Такой комнаты не существует");
+      }
+
+      socket.to(titleRoom).emit("doneSendingMessage", message);
     } catch (err) {
       console.log(err);
 

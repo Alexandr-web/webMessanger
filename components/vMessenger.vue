@@ -90,13 +90,14 @@
       const socket = io(socketHost);
 
       socket.on("doneJoiningToRoom", (data) => {
-        const resData = Object.keys(data).reduce((acc, key) => {
-          acc.push({ [key]: data[key], });
+        this.$store.commit("room/setActiveRoom", {
+          ...this.getActiveRoom,
+          ...data,
+        });
+      });
 
-          return acc;
-        }, []);
-
-        this.$store.commit("room/setKeyAtActiveRoom", resData);
+      socket.on("doneSendingMessage", (data) => {
+        console.log(data);
       });
     },
     methods: {
@@ -118,10 +119,22 @@
           throw err;
         }
       },
-      sendMessage() {
-        const { id, } = this.getActiveRoom;
+      async sendMessage() {
+        try {
+          const socket = io(socketHost);
+          const token = this.$store.getters["auth/getToken"];
+          const userId = await this.$store.dispatch("user/getIdByToken", token);
+          const { title: titleRoom, } = this.getActiveRoom;
+          const reqData = {
+            userId,
+            titleRoom,
+            message: this.message,
+          };
 
-        console.log(this.message);
+          socket.emit("sendMessage", reqData);
+        } catch (err) {
+          throw err;
+        }
       },
     },
   };

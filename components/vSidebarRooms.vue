@@ -86,7 +86,7 @@
           
           socket.emit("setRoom", {
             userId: id,
-            roomTitle: room.title,
+            titleRoom: room.title,
           });
         } catch (err) {
           throw err;
